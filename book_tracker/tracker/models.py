@@ -1,15 +1,25 @@
 from django.db import models
+import hashlib
 
 
 class User(models.Model):
-    email = models.EmailField(verbose_name='Email')
+    email = models.EmailField(verbose_name='Почта', unique=True)
     first_name = models.CharField(verbose_name='Имя', max_length=30)
     last_name = models.CharField(verbose_name='Фамилие', max_length=30)
-    token = models.CharField(verbose_name='Фамилие', max_length=30)
+    password_hash = models.CharField(verbose_name='Пароль', max_length=120)
+    token = models.CharField(verbose_name='Токен', max_length=30)
 
 
     def __str__(self):
-        return f'{self.name}\t{self.last_name}'
+        return f'{self.first_name}\t{self.last_name}'
+
+
+    def set_password_hash(self, password):
+        self.password_hash = hashlib.md5(password.encode()).hexdigest()
+
+
+    def check_password(self, password):
+        return self.password_hash == hashlib.md5(password.encode()).hexdigest()
 
 
     class Meta:
