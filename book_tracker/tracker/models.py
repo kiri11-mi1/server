@@ -9,7 +9,7 @@ class User(models.Model):
 
 
     def __str__(self):
-        return f'User: {self.name} {self.last_name}'
+        return f'{self.name}\t{self.last_name}'
 
 
     class Meta:
@@ -19,12 +19,12 @@ class User(models.Model):
 
 class Book(models.Model):
     name = models.CharField(verbose_name='Название', max_length=30)
-    author_name = models.CharField(verbose_name='Фамилие', max_length=60)
+    author_name = models.CharField(verbose_name='Автор', max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
     def __str__(self):
-        return f'Book: {self.name}\tAuthor: {self.author_name}'
+        return f'{self.name}\t{self.author_name}'
 
 
     class Meta:
