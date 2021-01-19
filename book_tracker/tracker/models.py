@@ -1,5 +1,5 @@
 from django.db import models
-import hashlib
+from .service.utils import make_password
 
 
 class User(models.Model):
@@ -15,11 +15,11 @@ class User(models.Model):
 
 
     def set_password_hash(self, password):
-        self.password_hash = hashlib.md5(password.encode()).hexdigest()
+        self.password_hash = make_password(password)
 
 
     def check_password(self, password):
-        return self.password_hash == hashlib.md5(password.encode()).hexdigest()
+        return self.password_hash == make_password(password)
 
 
     class Meta:
