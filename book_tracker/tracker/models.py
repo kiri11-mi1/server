@@ -28,7 +28,7 @@ class User(models.Model):
 
 
 class Book(models.Model):
-    name = models.CharField(verbose_name='Название', max_length=30)
+    name = models.CharField(verbose_name='Название', max_length=100)
     author_name = models.CharField(verbose_name='Автор', max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
