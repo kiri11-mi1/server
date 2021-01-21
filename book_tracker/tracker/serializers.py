@@ -5,7 +5,7 @@ from . import models
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book
-        fields = '__all__'
+        exclude = ('user', )
 
 
 class UserSerializer(serializers.ModelSerializer):
