@@ -70,5 +70,131 @@ class UserView(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+    def delete(self, request):
+        token = request.POST.get('token')
+        
+        if not token:
+            return Response({'error': 'token is empty'}, status=500)
+
+        try:
+            user = models.User.objects.get(token=token)
+        except:
+            return Response({'error': 'not found user'}, status=404)
+
+        user.delete()
+        return Response({"success": f'User {user.first_name} was deleted'})
+
+
 class BookView(viewsets.ViewSet):
-    pass
+    def get(self, request):
+        token = request.POST.get('token')
+
+        if not token:
+            return Response({'error': 'token is empty'}, status=500)
+
+        try:
+            user = models.User.objects.get(token=token)
+        except:
+            return Response({'error': 'auth failed'}, status=500)
+
+        books = models.Book.objects.filter(user_id=user.id)
+        serializer = serializers.BookSerializer(books, many=True)
+        return Response({'books': serializer.data})
+
+
+    def add(self, request):
+        token = request.POST.get('token')
+        name = request.POST.get('name')
+        author_name = request.POST.get('author_name')
+        status = request.POST.get('status')
+
+        if not name:
+            return Response({'error': 'name is empty'}, status=500)
+
+        if not author_name:
+            return Response({'error': 'author_name is empty'}, status=500)
+        
+        if not token:
+            return Response({'error': 'token is empty'}, status=500)
+
+        if not status:
+            return Response({'error': 'status is empty'}, status=500)
+
+        try:
+            user = models.User.objects.get(token=token)
+        except:
+            return Response({'error': 'auth failed'}, status=500)
+        
+        book = models.Book(
+            name=name,
+            author_name=author_name,
+            status=status,
+            user=user
+        )
+
+        book.save()
+        serializer = serializers.BookSerializer(book)
+        return Response({'book': serializer.data})
+
+
+    def update(self, request):
+        token = request.POST.get('token')
+        id = request.POST.get('id')
+        name = request.POST.get('name')
+        author_name = request.POST.get('author_name')
+        status = request.POST.get('status')
+
+        if not token:
+            return Response({'error': 'token is empty'}, status=500)
+        
+        if not id:
+            return Response({'error': 'id is empty'}, status=500)
+
+        try:
+            user = models.User.objects.get(token=token)
+        except:
+            return Response({'error': 'auth failed'}, status=500)
+
+        try:
+            book = models.Book.objects.get(id=id)
+        except:
+            return Response({'error': 'not found book'}, status=404)
+
+        if name:
+            book.name = name
+        
+        if author_name:
+            book.author_name = author_name
+
+        if status:
+            book.status = status
+
+        book.save()
+        serializer = serializers.BookSerializer(book)
+        return Response({'book': serializer.data})
+    
+
+    def delete(self, request):
+        token = request.POST.get('token')
+        id = request.POST.get('id')
+
+        if not token:
+            return Response({'error': 'token is empty'}, status=500)
+
+        if not id:
+            return Response({'error': 'id is empty'}, status=500)
+
+        try:
+            user = models.User.objects.get(token=token)
+        except:
+            return Response({'error': 'auth failed'}, status=500)
+        
+        try:
+            book = models.Book.objects.get(id=id)
+        except:
+            return Response({'error': 'not found book'}, status=404)
+
+        book.delete()      
+
+        return Response({"success": f"book '{book.name}' was deleted"})
+
