@@ -28,8 +28,16 @@ class User(models.Model):
 
 
 class Book(models.Model):
+
+    STATUS = (
+        ('not_read', 'Не прочитано'),
+        ('read', 'Прочтено'),
+        ('in_progress', 'Читаю')
+    )
+
     name = models.CharField(verbose_name='Название', max_length=100)
     author_name = models.CharField(verbose_name='Автор', max_length=100)
+    status = models.CharField(verbose_name='Статус', choices=STATUS, max_length=15)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
