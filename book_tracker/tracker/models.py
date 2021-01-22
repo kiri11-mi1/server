@@ -6,7 +6,7 @@ class User(models.Model):
     email = models.EmailField(verbose_name='Почта', unique=True)
     first_name = models.CharField(verbose_name='Имя', max_length=30)
     last_name = models.CharField(verbose_name='Фамилие', max_length=30)
-    password_hash = models.CharField(verbose_name='Пароль', max_length=120)
+    password_hash = models.CharField(verbose_name='Пароль', max_length=120, editable=False)
     token = models.CharField(verbose_name='Токен', max_length=30)
 
 
