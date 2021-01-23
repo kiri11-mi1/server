@@ -1,1 +1,1 @@
-web: gunicorn
+web: gunicorn book_tracker.wsgi
