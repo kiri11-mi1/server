@@ -11,7 +11,7 @@ class User(models.Model):
 
 
     def __str__(self):
-        return f'{self.first_name}\t{self.last_name}'
+        return f'{self.first_name} {self.last_name}'
 
 
     def set_password_hash(self, password):
@@ -42,7 +42,7 @@ class Book(models.Model):
 
 
     def __str__(self):
-        return f'{self.name}\t{self.author_name}'
+        return f'{self.name} - {self.author_name}'
 
 
     class Meta:
