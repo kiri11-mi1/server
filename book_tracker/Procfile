@@ -1,1 +1,2 @@
 web: gunicorn book_tracker.wsgi
+web: python book_tracker/manage.py migrate
