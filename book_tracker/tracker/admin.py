@@ -7,8 +7,8 @@ from random import randint as rd
 class BookInline(admin.StackedInline):
     """Отзывы на странице фильма"""
     model = models.Book
-    extra = 1
-    readonly_fields = ("name", "author_name", "status")
+    extra = 0
+    readonly_fields = ("name", "author_name", "status",)
 
 
 @admin.register(models.User)
@@ -33,9 +33,10 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(models.Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author_name', 'status')
+    list_display = ('name', 'author_name', 'status', 'user')
     search_fields = ('name', 'author_name')
     list_filter = ('status',)
+    list_editable = ('status', )
 
 
 admin.site.site_title = "Book tracker"
