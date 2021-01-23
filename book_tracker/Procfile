@@ -1,2 +1,0 @@
-web: gunicorn book_tracker.wsgi
-heroku ps:scale web=2
