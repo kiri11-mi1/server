@@ -11,6 +11,7 @@ from . import serializers
 
 class UserView(viewsets.ViewSet):
     def registration(self, request):
+        """Регистрация пользователя"""
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -46,10 +47,11 @@ class UserView(viewsets.ViewSet):
         user.set_password_hash(password)
         user.save()
 
-        return Response({'token': user.token}, status=200)
+        return Response({'token': user.token}, status=201)
 
 
     def login(self, request):
+        """Вход в аккаунт"""
         email = request.POST.get('email')
         password = request.POST.get('password')
 
@@ -67,12 +69,13 @@ class UserView(viewsets.ViewSet):
             return Response({'error': 'bad password'}, status = 500)
         
         serializer = serializers.UserSerializer(user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
 
 
     def delete(self, request):
+        """Удаление пользователя"""
         token = request.POST.get('token')
-        
+
         if not token:
             return Response({'error': 'token is empty'}, status=500)
 
@@ -82,11 +85,12 @@ class UserView(viewsets.ViewSet):
             return Response({'error': 'not found user'}, status=404)
 
         user.delete()
-        return Response({"success": f'User {user.first_name} was deleted'})
+        return Response({"success": f'User {user.first_name} was deleted'}, status=204)
 
 
 class BookView(viewsets.ViewSet):
     def get(self, request):
+        """Получение всех книг пользвателя"""
         token = request.POST.get('token')
 
         if not token:
@@ -99,10 +103,11 @@ class BookView(viewsets.ViewSet):
 
         books = models.Book.objects.filter(user_id=user.id)
         serializer = serializers.BookSerializer(books, many=True)
-        return Response({'books': serializer.data})
+        return Response({'books': serializer.data}, status=200)
 
 
     def add(self, request):
+        """Добавление книги в личную библиотеку"""
         token = request.POST.get('token')
         name = request.POST.get('name')
         author_name = request.POST.get('author_name')
@@ -134,10 +139,11 @@ class BookView(viewsets.ViewSet):
 
         book.save()
         serializer = serializers.BookSerializer(book)
-        return Response({'book': serializer.data})
+        return Response({'book': serializer.data}, status=201)
 
 
     def update(self, request):
+        """Обновление ифнормации о кинге"""
         token = request.POST.get('token')
         id = request.POST.get('id')
         name = request.POST.get('name')
@@ -171,10 +177,11 @@ class BookView(viewsets.ViewSet):
 
         book.save()
         serializer = serializers.BookSerializer(book)
-        return Response({'book': serializer.data})
+        return Response({'book': serializer.data}, status=200)
     
 
     def delete(self, request):
+        """Удаление книги из личной библиотеки"""
         token = request.POST.get('token')
         id = request.POST.get('id')
 
@@ -196,5 +203,5 @@ class BookView(viewsets.ViewSet):
 
         book.delete()      
 
-        return Response({"success": f"book '{book.name}' was deleted"})
+        return Response({"success": f"book '{book.name}' was deleted"}, status=204)
 
