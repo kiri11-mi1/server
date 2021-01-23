@@ -1,2 +1,1 @@
-web: gunicorn book_tracker.book_tracker.wsgi
-heroku ps:scale web=1
+web: gunicorn book_tracker.wsgi —chdir book_tracker
