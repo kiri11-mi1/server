@@ -69,7 +69,36 @@ class UserView(viewsets.ViewSet):
             return Response({'error': 'bad password'}, status = 500)
         
         serializer = serializers.UserSerializer(user)
-        return Response(serializer.data, status=200)
+        return Response({'user': serializer.data}, status=200)
+
+
+    def update(self, request):
+        """Изменения информации о пользователе"""
+        token = request.POST.get('token')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+
+        if not token:
+            return Response({'error': 'token is empty'}, status=500)
+
+        try:
+            user = models.User.objects.get(token=token)
+        except:
+            return Response({'error': 'not found user'}, status=404)
+
+        if first_name:
+            user.first_name = first_name
+
+        if last_name:
+            user.last_name = last_name
+
+        if password:
+            user.set_password_hash(password)
+
+        user.save()
+        serializer = serializers.UserSerializer(user)
+        return Response({'user': serializer.data}, status=200)
 
 
     def delete(self, request):
@@ -85,7 +114,7 @@ class UserView(viewsets.ViewSet):
             return Response({'error': 'not found user'}, status=404)
 
         user.delete()
-        return Response({"success": f'User {user.first_name} was deleted'}, status=204)
+        return Response({"success": f'User {user.first_name} was deleted'}, status=200)
 
 
 class BookView(viewsets.ViewSet):
@@ -203,5 +232,5 @@ class BookView(viewsets.ViewSet):
 
         book.delete()      
 
-        return Response({"success": f"book '{book.name}' was deleted"}, status=204)
+        return Response({"success": f"book '{book.name}' was deleted"}, status=200)
 
