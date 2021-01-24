@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'book_tracker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd46v8une9v01mf',
-        'HOST': 'ec2-3-220-23-212.compute-1.amazonaws.com',
-        'PORT': 5432,
-        'USER': 'vjqkietnedaliz',
-        'PASSWORD': 'efbfe71b835b104b8df211831d5de04f406c3e177633bc183408e71da013e3c6',
+        'NAME': os.environ.get('NAME'),
+        'HOST': os.environ.get('HOST'),
+        'PORT': int(os.environ.get('PORT')),
+        'USER': os.environ.get('USER'),
+        'PASSWORD': os.environ.get('PASSWORD'),
     }
 }
 
