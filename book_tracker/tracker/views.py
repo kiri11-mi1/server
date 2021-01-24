@@ -103,7 +103,7 @@ class BookView(viewsets.ViewSet):
 
         books = models.Book.objects.filter(user_id=user.id)
         serializer = serializers.BookSerializer(books, many=True)
-        return Response({'books': serializer.data}, status=200)
+        return Response(serializer.data, status=200)
 
 
     def add(self, request):
