@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['my-book-tracker.herokuapp.com', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,6 +74,21 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'book_tracker.wsgi.application'
+
+
+# Jassmin settings
+JAZZMIN_SETTINGS = {
+    "site_title": "Book Tracker",
+    "site_header": "Book Tracker",
+    "welcome_sign": "Welcome to book tracker",
+     "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "tracker.User": "fas fa-user",
+        "tracker.Book": "fas fa-book",
+    },
+}
 
 
 # Database
