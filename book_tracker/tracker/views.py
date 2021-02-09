@@ -6,7 +6,10 @@ from django.core.exceptions import ValidationError
 
 from . import models
 from .service.utils import get_token
-from . import serializers
+from . import serializers, docs
+
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import api_view
 
 
 class UserView(viewsets.ViewSet):
@@ -118,6 +121,8 @@ class UserView(viewsets.ViewSet):
 
 
 class BookView(viewsets.ViewSet):
+    @swagger_auto_schema(**docs.swagger_get_book)
+    @api_view(['GET'])
     def get(self, request):
         """Получение всех книг пользвателя"""
         token = request.POST.get('token')
@@ -128,7 +133,7 @@ class BookView(viewsets.ViewSet):
         try:
             user = models.User.objects.get(token=token)
         except:
-            return Response({'error': 'auth failed'}, status=500)
+            return Response({'error': 'user not found'}, status=404)
 
         books = models.Book.objects.filter(user_id=user.id)
         serializer = serializers.BookSerializer(books, many=True)
