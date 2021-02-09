@@ -8,6 +8,7 @@ urlpatterns = [
         'delete': 'delete',
         'put':'update',
     })),
+
     path('book/', views.BookView.as_view({
                 'post': 'add',
                 'get': 'get',
