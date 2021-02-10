@@ -140,6 +140,8 @@ class BookView(viewsets.ViewSet):
         return Response({'books': serializer.data}, status=200)
 
 
+    @swagger_auto_schema(**docs.swagger_add_book)
+    @api_view(['POST'])
     def add(self, request):
         """Добавление книги в личную библиотеку"""
         token = request.POST.get('token')
@@ -162,7 +164,7 @@ class BookView(viewsets.ViewSet):
         try:
             user = models.User.objects.get(token=token)
         except:
-            return Response({'error': 'auth failed'}, status=500)
+            return Response({'error': 'user not found'}, status=404)
         
         book = models.Book(
             name=name,
@@ -176,6 +178,8 @@ class BookView(viewsets.ViewSet):
         return Response({'book': serializer.data}, status=201)
 
 
+    @swagger_auto_schema(**docs.swagger_update_book)
+    @api_view(['PUT'])
     def update(self, request):
         """Обновление ифнормации о кинге"""
         token = request.POST.get('token')
@@ -193,7 +197,7 @@ class BookView(viewsets.ViewSet):
         try:
             user = models.User.objects.get(token=token)
         except:
-            return Response({'error': 'auth failed'}, status=500)
+            return Response({'error': 'user not found'}, status=404)
 
         try:
             book = models.Book.objects.get(id=id)
@@ -214,6 +218,8 @@ class BookView(viewsets.ViewSet):
         return Response({'book': serializer.data}, status=200)
     
 
+    @swagger_auto_schema(**docs.swagger_delete_book)
+    @api_view(['DELETE'])
     def delete(self, request):
         """Удаление книги из личной библиотеки"""
         token = request.POST.get('token')
@@ -228,14 +234,14 @@ class BookView(viewsets.ViewSet):
         try:
             user = models.User.objects.get(token=token)
         except:
-            return Response({'error': 'auth failed'}, status=500)
+            return Response({'error': 'user not found'}, status=404)
         
         try:
             book = models.Book.objects.get(id=id)
         except:
             return Response({'error': 'not found book'}, status=404)
 
-        book.delete()      
+        book.delete()
 
         return Response({"success": f"book '{book.name}' was deleted"}, status=200)
 
