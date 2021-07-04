@@ -19,4 +19,4 @@ jobs:
 
     steps:
     - name: Print Deploy message
-    run: echo "Deploying" 
+      run: echo "Deploying" 
