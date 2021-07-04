@@ -1,0 +1,22 @@
+name: MyFirstAction
+
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  my_settings:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Print Hello Message
+      run: echo "Hello World"
+  
+  my_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ubuntu-latest
+    run: echo "Hello World" 
